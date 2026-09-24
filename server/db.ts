@@ -5,8 +5,16 @@ import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
-    try { _db = drizzle(process.env.DATABASE_URL); } catch { _db = null; }
+  const databaseUrl = process.env.WUSOOL_DATABASE_URL ?? process.env.DATABASE_URL;
+  if (!_db && databaseUrl) {
+    try {
+      _db = drizzle({
+        connection: {
+          uri: databaseUrl,
+          ssl: { rejectUnauthorized: true },
+        },
+      });
+    } catch { _db = null; }
   }
   return _db;
 }
