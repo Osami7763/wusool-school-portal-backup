@@ -1,0 +1,437 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --primary: var(--color-blue-700);
+  --primary-foreground: var(--color-blue-50);
+  --sidebar-primary: var(--color-blue-600);
+  --sidebar-primary-foreground: var(--color-blue-50);
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+  --radius: 0.65rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.235 0.015 65);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.235 0.015 65);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.235 0.015 65);
+  --secondary: oklch(0.98 0.001 286.375);
+  --secondary-foreground: oklch(0.4 0.015 65);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.141 0.005 285.823);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.623 0.214 259.815);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.235 0.015 65);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.623 0.214 259.815);
+}
+
+.dark {
+  --primary: var(--color-blue-700);
+  --primary-foreground: var(--color-blue-50);
+  --sidebar-primary: var(--color-blue-500);
+  --sidebar-primary-foreground: var(--color-blue-50);
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.85 0.005 65);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.85 0.005 65);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.85 0.005 65);
+  --secondary: oklch(0.24 0.006 286.033);
+  --secondary-foreground: oklch(0.7 0.005 65);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground:  oklch(0.92 0.005 65);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.488 0.243 264.376);
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.85 0.005 65);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground:  oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.488 0.243 264.376);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@layer components {
+  .font-display {
+    font-family: "Tajawal", "IBM Plex Sans Arabic", sans-serif;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 420ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .button-lift,
+  .card-hover,
+  .nav-item {
+    transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 180ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  .button-lift:active { transform: scale(0.97); }
+  .card-hover:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(15, 23, 42, 0.07); }
+
+  .brand-mark {
+    background: linear-gradient(145deg, #064e3b 0%, #0f766e 52%, #0e7490 100%);
+    border: 3px solid #86efac;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14), 0 10px 24px rgba(15, 118, 110, 0.22);
+  }
+}
+
+@layer components {
+  /**
+   * Custom container utility that centers content and adds responsive padding.
+   *
+   * This overrides Tailwind's default container behavior to:
+   * - Auto-center content (mx-auto)
+   * - Add responsive horizontal padding
+   * - Set max-width for large screens
+   *
+   * Usage: <div className="container">...</div>
+   *
+   * For custom widths, use max-w-* utilities directly:
+   * <div className="max-w-6xl mx-auto px-4">...</div>
+   */
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem; /* 16px - mobile padding */
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem; /* 32px - desktop padding */
+      padding-right: 2rem;
+      max-width: 1280px; /* Standard content width */
+    }
+  }
+}
+
+.print-only { display: none; }
+
+@media print {
+  @page { margin: 12mm; }
+  .print-only { display: block !important; }
+  body { background: #fff !important; }
+  .no-print { display: none !important; }
+  main { min-height: auto !important; background: #fff !important; }
+  section, article { break-inside: avoid; box-shadow: none !important; }
+  .print-break-before { break-before: page; }
+}
+
+/* Wusool Design 01 — theme and management workspace */
+.wusool-design01.light-mode,
+.wusool-admin.light-mode { background: #eef4f3 !important; color: #10233d !important; }
+.wusool-design01.light-mode header,
+.wusool-admin.light-mode header { background: rgba(255,255,255,.94) !important; border-color: #d8e8e5 !important; }
+.wusool-design01.light-mode .text-white,
+.wusool-admin.light-mode .text-white { color: #10233d !important; }
+.wusool-design01.light-mode .bg-\[\#102d52\] { background: #ffffff !important; color: #10233d !important; }
+.wusool-design01.light-mode .bg-\[\#0b2342\] { background: #f4faf8 !important; color: #10233d !important; border-color: #c8e6de !important; }
+.wusool-design01.light-mode .bg-\[\#071a33\] { background: #eef4f3 !important; color: #10233d !important; }
+.wusool-design01.light-mode .text-slate-300 { color: #52657c !important; }
+.wusool-design01.light-mode .text-slate-400 { color: #687b8c !important; }
+.wusool-design01.light-mode .border-white\/10 { border-color: #d8e8e5 !important; }
+.wusool-design01.light-mode .border-white\/15 { border-color: #b8d8d1 !important; }
+.wusool-admin { background-image: radial-gradient(circle at 15% 0%, rgba(20,184,166,.12), transparent 28%), radial-gradient(circle at 90% 20%, rgba(14,116,144,.16), transparent 30%); }
+.wusool-admin > header { box-shadow: 0 10px 30px rgba(0,0,0,.16); }
+.wusool-admin .admin-login-card { backdrop-filter: blur(12px); }
+.wusool-admin.light-mode { background-image: radial-gradient(circle at 15% 0%, rgba(20,184,166,.12), transparent 28%), radial-gradient(circle at 90% 20%, rgba(14,116,144,.08), transparent 30%); }
+.wusool-admin.light-mode .admin-login-card { background: #fff !important; color: #10233d !important; border-color: #d7e8e4 !important; }
+.wusool-admin.light-mode .admin-login-card input { background: #f7fbfa !important; color: #10233d !important; border-color: #cfe4df !important; }
+.wusool-admin.light-mode .admin-login-card .text-slate-500 { color: #617386 !important; }
+.wusool-admin.light-mode .bg-\[\#f6f8fb\] { background: #eef4f3 !important; }
+.wusool-admin.light-mode .border-slate-200 { border-color: #d7e8e4 !important; }
+.wusool-admin.light-mode .bg-white { background: #fff !important; }
+.wusool-admin.light-mode .text-slate-900 { color: #10233d !important; }
+.wusool-admin.light-mode .text-slate-600 { color: #52657c !important; }
+.wusool-admin.light-mode .bg-slate-900 { background: #102d52 !important; }
+
+/* Mobile-first management workspace */
+.admin-topbar { gap: 1rem; }
+.admin-content { width: 100%; }
+.admin-tabs button, .admin-topbar button { min-height: 44px; }
+@media (max-width: 640px) {
+  .wusool-admin .admin-topbar { align-items: stretch; padding: .75rem 1rem; }
+  .wusool-admin .admin-topbar > div:last-child { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; gap: .5rem; }
+  .wusool-admin .admin-topbar > div:last-child > button:first-child { grid-column: span 2; }
+  .wusool-admin .admin-topbar > div:last-child button { width: 100%; min-height: 46px; }
+  .wusool-admin .admin-content { padding: 1rem; gap: 1rem; }
+  .wusool-admin .admin-hero { border-radius: 1.5rem; padding: 1.25rem; }
+  .wusool-admin .admin-hero h1 { font-size: 1.65rem; line-height: 1.45; }
+  .wusool-admin .admin-stats { grid-template-columns: 1fr; gap: .65rem; }
+  .wusool-admin .admin-stats > * { min-height: 72px; }
+  .wusool-admin .admin-tabs { display: flex; overflow-x: auto; overscroll-behavior-inline: contain; padding-bottom: .25rem; scrollbar-width: thin; }
+  .wusool-admin .admin-tabs button { flex: 0 0 auto; min-width: 138px; white-space: nowrap; padding: .75rem 1rem; }
+  .wusool-admin .admin-panel { border-radius: 1.5rem; padding: 1rem; }
+  .wusool-admin .admin-panel form { gap: 1rem; }
+  .wusool-admin input, .wusool-admin select, .wusool-admin textarea { min-height: 46px; font-size: 16px; }
+  .wusool-admin textarea { min-height: 112px; }
+  .wusool-admin form button[type="submit"] { min-height: 50px; width: 100%; }
+  .wusool-admin .flex.gap-2:has(input) { align-items: stretch; }
+  .wusool-admin .flex.gap-2:has(input) button { min-width: 52px; }
+  .wusool-admin .rounded-3xl { border-radius: 1.35rem; }
+}
+
+/* Dark admin contrast: every label, field and saved item stays readable */
+.wusool-admin:not(.light-mode) .admin-panel { background: #102d52 !important; color: #ffffff !important; border-color: rgba(148, 211, 202, .22) !important; }
+.wusool-admin:not(.light-mode) .admin-panel h2,
+.wusool-admin:not(.light-mode) .admin-panel h3,
+.wusool-admin:not(.light-mode) .admin-panel h4,
+.wusool-admin:not(.light-mode) .admin-panel label,
+.wusool-admin:not(.light-mode) .admin-panel span { color: #ffffff !important; }
+.wusool-admin:not(.light-mode) .admin-panel .text-slate-500,
+.wusool-admin:not(.light-mode) .admin-panel .text-slate-600,
+.wusool-admin:not(.light-mode) .admin-panel .text-slate-700 { color: #c3d2df !important; }
+.wusool-admin:not(.light-mode) .admin-panel input,
+.wusool-admin:not(.light-mode) .admin-panel select,
+.wusool-admin:not(.light-mode) .admin-panel textarea { background: #071a33 !important; color: #ffffff !important; border-color: rgba(148, 211, 202, .28) !important; }
+.wusool-admin:not(.light-mode) .admin-panel input::placeholder,
+.wusool-admin:not(.light-mode) .admin-panel textarea::placeholder { color: #91a6b8 !important; }
+.wusool-admin:not(.light-mode) .admin-panel option { background: #102d52; color: #ffffff; }
+.wusool-admin:not(.light-mode) .admin-panel .bg-slate-50,
+.wusool-admin:not(.light-mode) .admin-panel .bg-white { background: #0b2342 !important; color: #ffffff !important; }
+.wusool-admin:not(.light-mode) .admin-panel .bg-violet-50 { background: #252258 !important; color: #ffffff !important; }
+.wusool-admin:not(.light-mode) .admin-panel .bg-amber-50 { background: #513817 !important; color: #ffffff !important; }
+.wusool-admin:not(.light-mode) .admin-panel .bg-teal-50 { background: #073f43 !important; color: #ffffff !important; }
+.wusool-admin:not(.light-mode) .admin-panel .text-teal-700 { color: #72e4d2 !important; }
+.wusool-admin:not(.light-mode) .admin-panel .text-rose-600 { color: #ff9ca7 !important; }
+.wusool-admin:not(.light-mode) .admin-panel .border-slate-100,
+.wusool-admin:not(.light-mode) .admin-panel .border-slate-200 { border-color: rgba(148, 211, 202, .2) !important; }
+.wusool-admin:not(.light-mode) .admin-topbar button:not(.bg-emerald-400) { color: #d8e8ef !important; border-color: rgba(148, 211, 202, .28) !important; }
+.wusool-admin:not(.light-mode) .admin-tabs button:not(.bg-teal-600) { background: #102d52 !important; color: #d8e8ef !important; border-color: rgba(148, 211, 202, .25) !important; }
+.wusool-admin:not(.light-mode) .admin-panel .bg-emerald-50 { background: #073f43 !important; color: #b8fff1 !important; }
+.wusool-admin:not(.light-mode) .admin-panel .text-emerald-700 { color: #8df3df !important; }
+.wusool-admin:not(.light-mode) .admin-panel .fixed .bg-white { background: #102d52 !important; color: #ffffff !important; }
+
+/* Unified readable palette across the whole Wusool site */
+.wusool-design01, .wusool-admin { --wusool-ink: #10233d; --wusool-muted: #52657c; --wusool-surface: #f8f6f0; --wusool-line: #d7e5e2; --wusool-dark-ink: #f4fbff; --wusool-dark-muted: #b8c9d8; }
+.wusool-design01.light-mode { color: var(--wusool-ink) !important; }
+.wusool-design01.light-mode .text-slate-900, .wusool-design01.light-mode .text-slate-800, .wusool-design01.light-mode .text-slate-700 { color: var(--wusool-ink) !important; }
+.wusool-design01.light-mode .text-slate-600, .wusool-design01.light-mode .text-slate-500, .wusool-design01.light-mode .text-slate-400 { color: var(--wusool-muted) !important; }
+.wusool-design01:not(.light-mode) .text-white { color: var(--wusool-dark-ink) !important; }
+.wusool-design01:not(.light-mode) .text-slate-300, .wusool-design01:not(.light-mode) .text-slate-400 { color: var(--wusool-dark-muted) !important; }
+.wusool-design01:not(.light-mode) input, .wusool-design01:not(.light-mode) select { color: var(--wusool-dark-ink) !important; }
+.wusool-design01.light-mode input, .wusool-design01.light-mode select { color: var(--wusool-ink) !important; border-color: var(--wusool-line) !important; }
+.wusool-design01.light-mode input::placeholder { color: #718398 !important; }
+.wusool-admin.light-mode .text-slate-900, .wusool-admin.light-mode .text-slate-800, .wusool-admin.light-mode .text-slate-700 { color: var(--wusool-ink) !important; }
+.wusool-admin.light-mode .text-slate-600, .wusool-admin.light-mode .text-slate-500 { color: var(--wusool-muted) !important; }
+.wusool-admin:not(.light-mode) { color: var(--wusool-dark-ink) !important; }
+.wusool-admin:not(.light-mode) .text-slate-900, .wusool-admin:not(.light-mode) .text-slate-800, .wusool-admin:not(.light-mode) .text-slate-700, .wusool-admin:not(.light-mode) .text-slate-600 { color: var(--wusool-dark-ink) !important; }
+.wusool-admin:not(.light-mode) .text-slate-500, .wusool-admin:not(.light-mode) .text-slate-400, .wusool-admin:not(.light-mode) .text-slate-300 { color: var(--wusool-dark-muted) !important; }
+.wusool-admin:not(.light-mode) label, .wusool-admin:not(.light-mode) label span { color: var(--wusool-dark-ink) !important; }
+.wusool-admin.light-mode input::placeholder, .wusool-admin.light-mode textarea::placeholder { color: #718398 !important; }
+.wusool-admin:not(.light-mode) input::placeholder, .wusool-admin:not(.light-mode) textarea::placeholder { color: #9cb1c2 !important; }
+
+/* Final typography contrast for Wusool inputs and site copy */
+.wusool-design01, .wusool-admin { font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif; letter-spacing: 0; }
+.wusool-design01 h1, .wusool-design01 h2, .wusool-design01 h3, .wusool-admin h1, .wusool-admin h2, .wusool-admin h3 { font-family: "Tajawal", "IBM Plex Sans Arabic", sans-serif; }
+.wusool-admin input, .wusool-admin select, .wusool-admin textarea { font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif !important; font-weight: 500; line-height: 1.5; }
+.wusool-admin:not(.light-mode) input, .wusool-admin:not(.light-mode) select, .wusool-admin:not(.light-mode) textarea { color: #f4fbff !important; caret-color: #6ee7d2 !important; text-shadow: 0 0 1px rgba(255,255,255,.25); }
+.wusool-admin.light-mode input, .wusool-admin.light-mode select, .wusool-admin.light-mode textarea { color: #10233d !important; caret-color: #087f77 !important; }
+.wusool-admin input::placeholder, .wusool-admin textarea::placeholder { font-weight: 400; opacity: 1; }
+.wusool-design01 button, .wusool-design01 a, .wusool-admin button, .wusool-admin a { -webkit-tap-highlight-color: transparent; }
+
+/* Guaranteed contrast tokens for every themed page and input */
+.wusool-design01:not(.light-mode) { color-scheme: dark; }
+.wusool-design01.light-mode { color-scheme: light; }
+.wusool-admin:not(.light-mode) { color-scheme: dark; }
+.wusool-admin.light-mode { color-scheme: light; }
+.wusool-design01:not(.light-mode) .bg-\[\#102d52\],
+.wusool-design01:not(.light-mode) .bg-\[\#0b2342\],
+.wusool-design01:not(.light-mode) .bg-\[\#071a33\] { color: #f4fbff !important; }
+.wusool-design01:not(.light-mode) .bg-\[\#102d52\] .text-slate-300,
+.wusool-design01:not(.light-mode) .bg-\[\#0b2342\] .text-slate-400 { color: #b8c9d8 !important; }
+.wusool-design01.light-mode .bg-\[\#f8f6f0\],
+.wusool-design01.light-mode .bg-white { color: #10233d !important; }
+.wusool-design01.light-mode .bg-\[\#f8f6f0\] .text-slate-500,
+.wusool-design01.light-mode .bg-white .text-slate-500,
+.wusool-design01.light-mode .bg-white .text-slate-600 { color: #52657c !important; }
+.wusool-admin:not(.light-mode) .admin-login-card input,
+.wusool-admin:not(.light-mode) .admin-panel input,
+.wusool-admin:not(.light-mode) .admin-panel select,
+.wusool-admin:not(.light-mode) .admin-panel textarea { color: #f4fbff !important; -webkit-text-fill-color: #f4fbff !important; background-color: #071a33 !important; }
+.wusool-admin.light-mode .admin-login-card input,
+.wusool-admin.light-mode .admin-panel input,
+.wusool-admin.light-mode .admin-panel select,
+.wusool-admin.light-mode .admin-panel textarea { color: #10233d !important; -webkit-text-fill-color: #10233d !important; background-color: #f7fbfa !important; }
+.wusool-admin:not(.light-mode) .admin-login-card input::placeholder,
+.wusool-admin:not(.light-mode) .admin-panel input::placeholder,
+.wusool-admin:not(.light-mode) .admin-panel textarea::placeholder { color: #9cb1c2 !important; -webkit-text-fill-color: #9cb1c2 !important; }
+.wusool-admin.light-mode .admin-login-card input::placeholder,
+.wusool-admin.light-mode .admin-panel input::placeholder,
+.wusool-admin.light-mode .admin-panel textarea::placeholder { color: #718398 !important; -webkit-text-fill-color: #718398 !important; }
+.wusool-admin:not(.light-mode) .admin-login-card label,
+.wusool-admin:not(.light-mode) .admin-login-card label span { color: #f4fbff !important; }
+.wusool-admin.light-mode .admin-login-card label,
+.wusool-admin.light-mode .admin-login-card label span { color: #10233d !important; }
+
+/* Final theme audit: preserve readable foreground colors on contrasting surfaces */
+.wusool-design01.light-mode .bg-gradient-to-br,
+.wusool-design01.light-mode aside.bg-\[\#102d52\] { color: #f4fbff !important; }
+.wusool-design01.light-mode .bg-gradient-to-br .text-white,
+.wusool-design01.light-mode aside.bg-\[\#102d52\] .text-white { color: #f4fbff !important; }
+.wusool-design01.light-mode .bg-gradient-to-br .text-slate-300,
+.wusool-design01.light-mode aside.bg-\[\#102d52\] .text-slate-400 { color: #b8c9d8 !important; }
+.wusool-design01.light-mode header .text-slate-200,
+.wusool-design01.light-mode header .text-slate-300 { color: #10233d !important; }
+.wusool-design01.light-mode header .text-emerald-200 { color: #087f77 !important; }
+.wusool-design01.light-mode .bg-emerald-400.text-\[\#062b2a\] { color: #062b2a !important; }
+.wusool-design01.light-mode .bg-emerald-500.text-white { color: #ffffff !important; }
+.wusool-design01.light-mode .bg-white .text-slate-600,
+.wusool-design01.light-mode .bg-white .text-slate-500,
+.wusool-design01.light-mode .bg-white .text-slate-400 { color: #52657c !important; }
+.wusool-admin.light-mode .bg-slate-900.text-white,
+.wusool-admin.light-mode button.bg-slate-900 { color: #ffffff !important; }
+.wusool-admin.light-mode .admin-hero { color: #f4fbff !important; }
+.wusool-admin.light-mode .admin-hero .text-white,
+.wusool-admin.light-mode .admin-hero .text-slate-300 { color: #f4fbff !important; }
+.wusool-admin.light-mode .admin-topbar .text-slate-600 { color: #52657c !important; }
+.wusool-admin:not(.light-mode) .admin-hero .text-white,
+.wusool-admin:not(.light-mode) .admin-hero .text-slate-300 { color: #f4fbff !important; }
+.wusool-admin:not(.light-mode) .admin-panel .text-white { color: #f4fbff !important; }
+
+/* Light mode fix: subject list uses a light surface, so its text must stay dark. */
+.wusool-design01.light-mode aside.bg-\[\#102d52\] {
+  color: #10233d !important;
+}
+.wusool-design01.light-mode aside.bg-\[\#102d52\] .text-white,
+.wusool-design01.light-mode aside.bg-\[\#102d52\] .bg-\[\#0b2342\] {
+  color: #10233d !important;
+}
+.wusool-design01.light-mode aside.bg-\[\#102d52\] .text-slate-400 {
+  color: #687b8c !important;
+}
+.wusool-design01.light-mode aside.bg-\[\#102d52\] input {
+  color: #10233d !important;
+  background: #eef4f3 !important;
+  border-color: #c8e6de !important;
+}
+.wusool-design01.light-mode aside.bg-\[\#102d52\] input::placeholder {
+  color: #687b8c !important;
+}
+
+/* Academic cards: explicit readable colors in both themes. */
+.wusool-design01 .academic-section { color: #10233d !important; }
+.wusool-design01 .academic-card { background: #ffffff !important; color: #10233d !important; border: 1px solid #e2e8f0; }
+.wusool-design01 .academic-card h3 { color: #10233d !important; }
+.wusool-design01 .academic-card span { color: #52657c !important; }
+.wusool-design01 .academic-card p { color: #52657c !important; }
+.wusool-design01 .academic-empty { color: #52657c !important; }
+.wusool-design01.light-mode .academic-section { color: #10233d !important; }
+.wusool-design01.light-mode .academic-card { background: #ffffff !important; color: #10233d !important; border-color: #d7e8e4 !important; }
+.wusool-design01.light-mode .academic-card h3 { color: #10233d !important; }
+.wusool-design01.light-mode .academic-card span,
+.wusool-design01.light-mode .academic-card p,
+.wusool-design01.light-mode .academic-empty { color: #52657c !important; }
+
+/* Student alerts: readable on the light surface as well as the dark theme. */
+.wusool-design01.light-mode .student-alerts {
+  color: #713f12 !important;
+  background: #fff7d6 !important;
+  border-color: #f3c96b !important;
+}
+.wusool-design01.light-mode .student-alerts svg { color: #b45309 !important; }
+.wusool-design01.light-mode .student-alerts p,
+.wusool-design01.light-mode .student-alerts b { color: #713f12 !important; }
