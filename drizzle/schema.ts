@@ -17,6 +17,7 @@ export const users = mysqlTable("users", {
 export const subjects = mysqlTable("subjects", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 120 }).notNull(),
+  teacherName: varchar("teacherName", { length: 180 }),
   color: varchar("color", { length: 24 }).default("teal").notNull(),
   sortOrder: int("sortOrder").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

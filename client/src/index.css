@@ -435,3 +435,32 @@
 .wusool-design01.light-mode .student-alerts svg { color: #b45309 !important; }
 .wusool-design01.light-mode .student-alerts p,
 .wusool-design01.light-mode .student-alerts b { color: #713f12 !important; }
+
+
+/* Dark, readable management dialogs on every viewport */
+.wusool-admin .fixed > div {
+  background: #102d52 !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(148, 163, 184, .28) !important;
+}
+.wusool-admin .fixed > div .text-slate-900,
+.wusool-admin .fixed > div .text-slate-800,
+.wusool-admin .fixed > div .text-slate-700,
+.wusool-admin .fixed > div .text-slate-600,
+.wusool-admin .fixed > div .text-slate-500 {
+  color: #dbeafe !important;
+}
+.wusool-admin .fixed > div input,
+.wusool-admin .fixed > div textarea,
+.wusool-admin .fixed > div select {
+  background: #071a33 !important;
+  color: #f8fafc !important;
+  border-color: rgba(148, 163, 184, .4) !important;
+}
+.wusool-admin .fixed > div input::placeholder,
+.wusool-admin .fixed > div textarea::placeholder { color: #94a3b8 !important; }
+.wusool-admin .fixed > div label { color: #dbeafe !important; }
+.wusool-admin .fixed > div .bg-slate-50 { background: #0b2342 !important; }
+.wusool-admin .fixed > div .border-slate-200,
+.wusool-admin .fixed > div .border-slate-300 { border-color: rgba(148, 163, 184, .35) !important; }
+.wusool-admin .fixed > div button.border-slate-200 { color: #dbeafe !important; border-color: rgba(148, 163, 184, .4) !important; }
