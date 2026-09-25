@@ -38,6 +38,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 export async function getUserByOpenId(openId: string) { const db = await getDb(); if (!db) return undefined; const r = await db.select().from(users).where(eq(users.openId, openId)).limit(1); return r[0]; }
 export async function getUserById(id: number) { const db = await getDb(); if (!db) return undefined; const r = await db.select().from(users).where(eq(users.id, id)).limit(1); return r[0]; }
 export async function getUserByUsername(username: string) { const db = await getDb(); if (!db) return undefined; const r = await db.select().from(users).where(eq(users.username, username)).limit(1); return r[0]; }
+export async function updateSchoolUserPassword(id: number, passwordHash: string) { const db = await getDb(); if (!db) throw new Error("Database is not available"); await db.update(users).set({ passwordHash }).where(eq(users.id, id)); return { success: true as const }; }
 
 export async function createSchoolUser(input: { username: string; passwordHash: string; name: string; role: "manager" | "teacher" | "student" | "parent" }) {
   const db = await getDb(); if (!db) throw new Error("Database is not available");

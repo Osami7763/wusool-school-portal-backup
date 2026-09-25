@@ -1,7 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { createAcademicItem, createAssignment, createAuditLog, createLesson, createScheduleItem, createSchoolUser, createSubject, deleteAcademicItem, deleteAssignment, deleteLesson, deleteScheduleItem, deleteSubject, getUserByUsername, listAuditLogs, listSchoolContent, listSchoolUsers, updateAcademicItem, updateAssignment, updateLesson, updateScheduleItem, updateSubject } from "./db";
+import { createAcademicItem, createAssignment, createAuditLog, createLesson, createScheduleItem, createSchoolUser, updateSchoolUserPassword, createSubject, deleteAcademicItem, deleteAssignment, deleteLesson, deleteScheduleItem, deleteSubject, getUserById, getUserByUsername, listAuditLogs, listSchoolContent, listSchoolUsers, updateAcademicItem, updateAssignment, updateLesson, updateScheduleItem, updateSubject } from "./db";
 import { storagePut } from "./storage";
 import { createSchoolToken, hashPassword, SCHOOL_COOKIE, schoolCookieOptions, verifyPassword } from "./school-auth";
 import { getSessionCookieOptions } from "./_core/cookies";
@@ -14,6 +14,7 @@ const schoolManagerProcedure = protectedProcedure.use(({ ctx, next }) => {
 });
 const schoolLoginInput = z.object({ username: z.string().trim().min(1).max(64), password: z.string().min(1).max(128) });
 const createUserInput = z.object({ username: z.string().trim().min(1).max(64).regex(/^[0-9A-Za-z_-]+$/), password: z.string().min(1).max(128), name: z.string().trim().min(2).max(120), role: z.enum(["teacher", "student", "parent"]) });
+const changePasswordInput = z.object({ currentPassword: z.string().min(1).max(128), newPassword: z.string().min(4).max(128), confirmPassword: z.string().min(4).max(128) }).refine(value => value.newPassword === value.confirmPassword, { path: ["confirmPassword"], message: "رمزا المرور الجديدان غير متطابقين" });
 const subjectInput = z.object({ name: z.string().trim().min(2).max(120), color: z.string().max(24).default("teal") });
 const lessonInput = z.object({ subjectId: z.number().int().positive(), title: z.string().trim().min(2).max(180), lessonDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), page: z.string().max(80).optional(), notes: z.string().max(5000).optional(), attachmentBase64: z.string().max(12_000_000).optional(), attachmentName: z.string().max(255).optional(), attachmentType: z.string().max(120).optional(), resourceUrl: z.string().url().max(2000).optional() });
 const assignmentInput = z.object({ subjectId: z.number().int().positive(), title: z.string().trim().min(2).max(180), description: z.string().max(5000).optional(), dueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), attachmentBase64: z.string().max(12_000_000).optional(), attachmentName: z.string().max(255).optional(), attachmentType: z.string().max(120).optional(), resourceUrl: z.string().url().max(2000).optional() });
@@ -48,6 +49,13 @@ export const appRouter = router({
   school: router({
     content: publicProcedure.query(() => listSchoolContent()),
     users: schoolManagerProcedure.query(() => listSchoolUsers()),
+    changePassword: schoolManagerProcedure.input(changePasswordInput).mutation(async ({ input, ctx }) => {
+      const user = await getUserById(ctx.user.id);
+      if (!user?.passwordHash || !verifyPassword(input.currentPassword, user.passwordHash)) throw new TRPCError({ code: "UNAUTHORIZED", message: "الرمز الحالي غير صحيح" });
+      await updateSchoolUserPassword(user.id, hashPassword(input.newPassword));
+      ctx.res.clearCookie(SCHOOL_COOKIE, { ...schoolCookieOptions(), maxAge: 0 });
+      return { success: true as const };
+    }),
     auditLogs: schoolManagerProcedure.query(() => listAuditLogs()),
     createUser: schoolManagerProcedure.input(createUserInput).mutation(async ({ input }) => {
       if (await getUserByUsername(input.username)) throw new TRPCError({ code: "CONFLICT", message: "رقم المستخدم مستخدم مسبقًا" });
