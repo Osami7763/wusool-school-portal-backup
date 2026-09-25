@@ -7,6 +7,7 @@ export const SCHOOL_COOKIE = "school_session";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 function secretKey() {
+  if (ENV.isProduction && !ENV.cookieSecret) throw new Error("JWT_SECRET must be configured in production");
   return new TextEncoder().encode(ENV.cookieSecret || "development-school-secret-change-me");
 }
 

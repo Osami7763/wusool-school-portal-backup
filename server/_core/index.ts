@@ -31,9 +31,39 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  app.disable("x-powered-by");
+  app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    if (process.env.NODE_ENV === "production") res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    next();
+  });
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  const loginFailures = new Map<string, { count: number; resetAt: number }>();
+  app.use("/api/trpc", (req, res, next) => {
+    if (!req.url?.includes("auth.schoolLogin")) return next();
+    const key = `${req.ip || "unknown"}:${String(req.body?.[0]?.json?.username || req.body?.json?.username || "unknown")}`;
+    const now = Date.now();
+    const record = loginFailures.get(key);
+    if (record && record.resetAt > now && record.count >= 10) {
+      res.status(429).json({ error: { message: "محاولات دخول كثيرة. حاول بعد 15 دقيقة." } });
+      return;
+    }
+    res.on("finish", () => {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        loginFailures.delete(key);
+        return;
+      }
+      const current = loginFailures.get(key);
+      if (!current || current.resetAt <= Date.now()) loginFailures.set(key, { count: 1, resetAt: Date.now() + 15 * 60 * 1000 });
+      else current.count += 1;
+    });
+    next();
+  });
   registerStorageProxy(app);
   registerOAuthRoutes(app);
   // tRPC API
