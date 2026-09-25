@@ -464,3 +464,65 @@
 .wusool-admin .fixed > div .border-slate-200,
 .wusool-admin .fixed > div .border-slate-300 { border-color: rgba(148, 163, 184, .35) !important; }
 .wusool-admin .fixed > div button.border-slate-200 { color: #dbeafe !important; border-color: rgba(148, 163, 184, .4) !important; }
+
+/* Centered, polished modal system for Wusool */
+.wusool-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100 !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)) !important;
+  overflow-y: auto;
+  animation: wusool-modal-fade 180ms ease-out both;
+}
+.wusool-modal-card {
+  position: relative;
+  margin: auto !important;
+  transform-origin: center;
+  animation: wusool-modal-pop 220ms cubic-bezier(.23, 1, .32, 1) both;
+}
+.wusool-modal-card h3,
+.wusool-modal-card h4 { color: #10233d !important; }
+.wusool-modal-card p,
+.wusool-modal-card label,
+.wusool-modal-card .text-slate-600,
+.wusool-modal-card .text-slate-500 { color: #52657c !important; }
+.wusool-modal-card input,
+.wusool-modal-card textarea,
+.wusool-modal-card select {
+  color: #10233d !important;
+  background: #f7fbfa !important;
+  border-color: #cfe4df !important;
+}
+.wusool-modal-card input::placeholder,
+.wusool-modal-card textarea::placeholder { color: #718398 !important; }
+.wusool-admin:not(.light-mode) .wusool-modal-card {
+  background: #102d52 !important;
+  border: 1px solid rgba(148, 211, 202, .28) !important;
+}
+.wusool-admin:not(.light-mode) .wusool-modal-card h3,
+.wusool-admin:not(.light-mode) .wusool-modal-card h4,
+.wusool-admin:not(.light-mode) .wusool-modal-card label { color: #f4fbff !important; }
+.wusool-admin:not(.light-mode) .wusool-modal-card p,
+.wusool-admin:not(.light-mode) .wusool-modal-card .text-slate-600,
+.wusool-admin:not(.light-mode) .wusool-modal-card .text-slate-500 { color: #c3d2df !important; }
+.wusool-admin:not(.light-mode) .wusool-modal-card input,
+.wusool-admin:not(.light-mode) .wusool-modal-card textarea,
+.wusool-admin:not(.light-mode) .wusool-modal-card select {
+  color: #f4fbff !important;
+  -webkit-text-fill-color: #f4fbff !important;
+  background: #071a33 !important;
+  border-color: rgba(148, 211, 202, .32) !important;
+}
+@keyframes wusool-modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes wusool-modal-pop { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .wusool-modal-backdrop, .wusool-modal-card { animation: none !important; }
+}
+@media (max-width: 480px) {
+  .wusool-modal-backdrop { padding: .75rem !important; }
+  .wusool-modal-card { max-height: 92dvh; border-radius: 22px !important; }
+}
