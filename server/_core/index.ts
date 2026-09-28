@@ -8,6 +8,7 @@ import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { purgeExpiredAcademicContent } from "../db";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -90,6 +91,11 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    void purgeExpiredAcademicContent().catch(error => console.error("Expired content cleanup failed", error));
+    const cleanupTimer = setInterval(() => {
+      void purgeExpiredAcademicContent().catch(error => console.error("Expired content cleanup failed", error));
+    }, 15 * 60 * 1000);
+    cleanupTimer.unref();
   });
 }
 

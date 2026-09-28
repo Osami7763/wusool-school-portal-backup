@@ -1,4 +1,4 @@
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, lt } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { academicItems, assignments, auditLogs, InsertUser, lessons, schedule, subjects, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
@@ -51,11 +51,33 @@ export async function listAuditLogs() { const db = await getDb(); if (!db) retur
 
 const defaultSubjects = ["الرياضيات 1-1", "الكفايات اللغوية 1-1 (اللغة العربية)", "الكيمياء 1", "الأحياء 1", "القرآن الكريم وتفسيره (أو التفسير)", "اللغة الإنجليزية 1 (Mega Goal)", "التقنية الرقمية 1", "التفكير الناقد"];
 let defaultSubjectsPromise: Promise<void> | null = null;
- export async function ensureDefaultSubjects() { if (defaultSubjectsPromise) return defaultSubjectsPromise; defaultSubjectsPromise = (async () => { const db = await getDb(); if (!db) return; const existing = await db.select({ id: subjects.id, name: subjects.name }).from(subjects); const oldQuran = existing.find(item => item.name === "القرآن الكريم وتفسيره"); const names = new Set(existing.map(item => item.name)); if (oldQuran) { await db.update(subjects).set({ name: "القرآن الكريم وتفسيره (أو التفسير)" }).where(eq(subjects.id, oldQuran.id)); names.add("القرآن الكريم وتفسيره (أو التفسير)"); } const highest = await db.select({ id: subjects.id }).from(subjects).orderBy(desc(subjects.id)).limit(1); let nextId = (highest[0]?.id ?? 0) + 1; for (let index = 0; index < defaultSubjects.length; index += 1) { const name = defaultSubjects[index]; if (!names.has(name)) { try { await db.insert(subjects).values({ id: nextId++, name, teacherName: null, color: ["teal", "blue", "violet", "amber", "rose"][index % 5], sortOrder: index, createdAt: new Date() }); } catch (error) { console.error("Default subject insert failed", { name, error: String(error) }); const found = await db.select({ id: subjects.id }).from(subjects).where(eq(subjects.name, name)).limit(1); if (!found[0]) throw new Error(`تعذر إضافة المادة الافتراضية: ${name}`); } names.add(name); } } })().catch(error => { defaultSubjectsPromise = null; throw error; }); return defaultSubjectsPromise; }
+export async function ensureDefaultSubjects() { if (defaultSubjectsPromise) return defaultSubjectsPromise; defaultSubjectsPromise = (async () => { const db = await getDb(); if (!db) return; const existing = await db.select({ id: subjects.id, name: subjects.name }).from(subjects); const oldQuran = existing.find(item => item.name === "القرآن الكريم وتفسيره"); const names = new Set(existing.map(item => item.name)); if (oldQuran) { await db.update(subjects).set({ name: "القرآن الكريم وتفسيره (أو التفسير)" }).where(eq(subjects.id, oldQuran.id)); names.add("القرآن الكريم وتفسيره (أو التفسير)"); } const highest = await db.select({ id: subjects.id }).from(subjects).orderBy(desc(subjects.id)).limit(1); let nextId = (highest[0]?.id ?? 0) + 1; for (let index = 0; index < defaultSubjects.length; index += 1) { const name = defaultSubjects[index]; if (!names.has(name)) { try { await db.insert(subjects).values({ id: nextId++, name, teacherName: null, color: ["teal", "blue", "violet", "amber", "rose"][index % 5], sortOrder: index, createdAt: new Date() }); } catch (error) { console.error("Default subject insert failed", { name, error: String(error) }); const found = await db.select({ id: subjects.id }).from(subjects).where(eq(subjects.name, name)).limit(1); if (!found[0]) throw new Error(`تعذر إضافة المادة الافتراضية: ${name}`); } names.add(name); } } })().catch(error => { defaultSubjectsPromise = null; throw error; }); return defaultSubjectsPromise; }
+
+function currentSchoolDate() {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: process.env.WUSOOL_TIMEZONE || "Asia/Riyadh" }).format(new Date());
+}
+
+/** Permanently removes assignments, exams, and research after their due date. */
+export async function purgeExpiredAcademicContent() {
+  const db = await getDb();
+  if (!db) return { assignments: 0, academicItems: 0 };
+  const today = currentSchoolDate();
+  const [assignmentResult, academicResult] = await Promise.all([
+    db.delete(assignments).where(lt(assignments.dueDate, today)),
+    db.delete(academicItems).where(lt(academicItems.dueDate, today)),
+  ]);
+  const deleted = {
+    assignments: Number(assignmentResult[0]?.affectedRows ?? 0),
+    academicItems: Number(academicResult[0]?.affectedRows ?? 0),
+  };
+  if (deleted.assignments || deleted.academicItems) console.log("Expired academic content removed", { today, ...deleted });
+  return deleted;
+}
 
 export async function listSchoolContent() {
   const db = await getDb(); if (!db) return { subjects: [], lessons: [], assignments: [], academicItems: [], schedule: [] };
   await ensureDefaultSubjects();
+  await purgeExpiredAcademicContent();
   const [subjectRows, lessonRows, assignmentRows, academicItemRows, scheduleRows] = await Promise.all([
     db.select().from(subjects).orderBy(asc(subjects.sortOrder), asc(subjects.id)),
     db.select().from(lessons).orderBy(desc(lessons.lessonDate), desc(lessons.id)),
