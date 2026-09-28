@@ -9,6 +9,8 @@ build/
 
 # Environment variables
 .env
+.env.mobile
+.env.mobile.local
 .env.local
 .env.development.local
 .env.test.local

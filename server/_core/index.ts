@@ -34,6 +34,18 @@ async function startServer() {
   const server = createServer(app);
   app.disable("x-powered-by");
   app.use((req, res, next) => {
+    const requestOrigin = req.headers.origin;
+    const allowedMobileOrigins = new Set(["capacitor://localhost", "https://localhost", "http://localhost"]);
+    if (requestOrigin && allowedMobileOrigins.has(requestOrigin)) {
+      res.setHeader("Access-Control-Allow-Origin", requestOrigin);
+      res.setHeader("Access-Control-Allow-Credentials", "true");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+      res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+    }
+    if (req.method === "OPTIONS") {
+      res.status(204).end();
+      return;
+    }
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("X-Frame-Options", "DENY");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
