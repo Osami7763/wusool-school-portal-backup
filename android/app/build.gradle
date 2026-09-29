@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    def adminApp = project.hasProperty("adminApp")
     namespace = "com.wusool.school"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.wusool.school"
+        applicationId adminApp ? "com.wusool.school.admin" : "com.wusool.school"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,9 +17,20 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("ANDROID_RELEASE_STORE_FILE") ?: "release-upload.keystore")
+            storePassword System.getenv("ANDROID_RELEASE_STORE_PASSWORD") ?: ""
+            keyAlias System.getenv("ANDROID_RELEASE_KEY_ALIAS") ?: "wusool-upload"
+            keyPassword System.getenv("ANDROID_RELEASE_KEY_PASSWORD") ?: ""
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            if (System.getenv("ANDROID_RELEASE_STORE_FILE")) {
+                signingConfig signingConfigs.release
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

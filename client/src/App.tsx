@@ -7,6 +7,8 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function Router() {
+  const adminMode = import.meta.env.VITE_APP_MODE === "admin";
+  if (adminMode) return <Switch><Route path="/" component={AssignmentEntry} /><Route path="/manage" component={AssignmentEntry} /><Route component={AssignmentEntry} /></Switch>;
   return <Switch><Route path="/" component={StudentPortal} /><Route path="/dashboard" component={AssignmentEntry} /><Route path="/manage" component={AssignmentEntry} /><Route path="/404" component={NotFound} /><Route component={NotFound} /></Switch>;
 }
 function App() { return <ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><Router /></TooltipProvider></ThemeProvider></ErrorBoundary>; }
