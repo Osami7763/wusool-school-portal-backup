@@ -248,6 +248,25 @@
 .wusool-admin.light-mode .text-slate-600 { color: #52657c !important; }
 .wusool-admin.light-mode .bg-slate-900 { background: #102d52 !important; }
 
+/* Responsive transparent brand marks */
+.brand-logo {
+  display: block;
+  width: min(16rem, 42vw);
+  max-width: 100%;
+  height: auto;
+  max-height: 4.25rem;
+  object-fit: contain;
+  object-position: center;
+  flex: 0 1 auto;
+}
+.wusool-design01 header .brand-logo,
+.wusool-admin .admin-topbar .brand-logo { width: min(14rem, 42vw); max-height: 3.25rem; }
+@media (max-width: 640px) {
+  .wusool-design01 header .brand-logo,
+  .wusool-admin .admin-topbar .brand-logo { width: min(11rem, 48vw); max-height: 2.75rem; }
+  .wusool-admin .admin-login-card .brand-logo { width: min(16rem, 82vw); max-height: 5rem; margin-inline: auto; }
+}
+
 /* Mobile-first management workspace */
 .admin-topbar { gap: 1rem; }
 .admin-content { width: 100%; }
